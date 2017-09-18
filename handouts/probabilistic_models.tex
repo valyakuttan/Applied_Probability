@@ -1,0 +1,165 @@
+\documentclass{tufte-handout}
+\usepackage{amsmath, amsfonts, amsthm}
+
+%% environments
+\theoremstyle{definition} \newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{remark} \newtheorem{remark}{Remark}
+
+%% commands
+\newcommand{\prob}[1]{\mathbf{P}\left(#1\right)}
+
+\author{John N. Tsitsiklis}
+\title{Probabilistic Models}
+\begin{document}
+\maketitle
+
+\section{Sets}
+\begin{definition}[De Morgan's laws]
+  \begin{equation}
+    \left( \bigcup_n S_n \right)^c = \bigcap_n {S_n}^c
+  \end{equation}
+  \begin{equation}
+    \left( \bigcap_n S_n \right)^c = \bigcup_n {S_n}^c
+  \end{equation}
+\end{definition}
+
+\begin{theorem}
+  \begin{equation}
+    A \cup \left( \cap_{n=1}^{\infty} B_n\right) =
+    \cap_{n=1}^{\infty} \left( A \cup B_n \right)
+  \end{equation}
+  \begin{equation}
+    A \cap \left( \cup_{n=1}^{\infty} B_n\right) =
+    \cup_{n=1}^{\infty} \left( A \cap B_n \right)
+  \end{equation}
+
+\end{theorem}
+
+\section{Probability Laws}
+\begin{definition}[Probability Axioms]\ \\
+  \begin{enumerate}
+  \item \textbf{Nonnegativity} $\prob{A} \geq 0$, for every event
+    $A$.
+  \item \textbf{Additivity} If $A$ and $B$ are two disjoint events then
+    \begin{equation*}
+      \prob{A \cup B} = \prob{A} + \prob{B}
+    \end{equation*}
+  \item \textbf{Normalization} $\prob{\Omega} = 1$, where $\Omega$ is
+    the \emph{sample space}.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}[Discrete Probability Law]
+  If the sample space consists of a finite number of possible outcomes,
+  then the probability law is specified by the probabilities of the
+  events that consists of a single element. In particular, the probability
+  of any event $\{s_1, s_2, \ldots s_n\}$ is the sum of the probabilities
+  of its elements:
+  \begin{equation*}
+    \prob{\{s_1, s_2, \ldots s_n\}} = \prob{s_1} + \prob{s_2} + \cdots +
+    \prob{s_n}
+  \end{equation*}
+\end{definition}
+
+\begin{definition}[Discrete Uniform Probability Law]
+  If the sample space consists of $n$ possible outcomes which are equally
+  likely, then the probability of any event $A$ is given by
+  \begin{equation*}
+    \prob{A} = \frac{\text{number of elements of }A}{n}
+  \end{equation*}
+\end{definition}
+
+\section{Properties of Probability Laws}
+Consider a probability law and let $A, B$ and $C$ be events:
+\begin{enumerate}[(a)]
+\item If $A \subset B$, then $\prob{A} \leq \prob{B}$
+\item $\prob{A \cup B} = \prob{A} + \prob{B} - \prob{A \cap B}$
+\item $\prob{A \cup B} \leq \prob{A} + \prob{B}$
+\item $\prob{A \cup B \cup C} = \prob{A} + \prob{A^c \cap B} +
+  \prob{A^c \cap B^c \cap C}$
+\end{enumerate}
+
+\begin{definition}
+  A \emph{partition} of the sample space $\Omega$ is a collection of
+  disjoint events $S_1, S_2, \ldots S_n$ such that $\Omega =
+  \cup_{i=1}^n S_i$. Then
+  \begin{equation*}
+    \prob{A} = \sum_{i=1}^n \prob{A \cap S_i}
+  \end{equation*}
+\end{definition}
+
+\begin{definition}[Bonferroni's inequality]
+  We have
+  \begin{enumerate}[(a)]
+  \item for any two events $A$ and $B$
+    \begin{equation*}
+      \prob{A \cap B} \geq \prob{A} + \prob{B} - 1
+    \end{equation*}
+  \item for $n$ events $A_1, A_2, \ldots, A_n$
+    \begin{equation*}
+      \prob{A_1 \cap A_2 \cap \cdots \cap A_n} \geq \prob{A_1} +
+      \prob{A_2} + \cdots + \prob{A_n} - (n - 1)
+    \end{equation*}
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}[The inclusion-exclusion formula]
+  We have
+  \begin{enumerate}[(a)]
+  \item for any two events $A$ and $B$
+    \begin{equation*}
+      \prob{A \cup B} = \prob{A} + \prob{B} - \prob{A \cup B}
+    \end{equation*}
+  \item for $n$ events $A_1, A_2, \ldots, A_n$. Let
+    $S_1 = \{i | 1 \leq i \leq n\}$, $S_2 = \{(i_1, i_2) |
+    1 \leq i_1 < i_2 \leq n\}$, and more generally, let $S_m$ be the set
+    of all $m$-tuples $(i_1, i_2, \ldots, i_m)$ of indices that satisfy
+    $1 \leq i_1 < i_2 < \cdots < i_m \leq n$. Then,
+    \begin{align*}
+      \prob{\cup_{k=1}^n A_k} & = \sum_{i \in S_1}\prob{A_i} \\
+                              & - \sum_{(i_1, i_2) \in S_2}\prob{A_{i_1}
+                                \cap A_{i_2}} \\
+                              & + \sum_{(i_1, i_2, i_3) \in S_3}
+                                \prob{A_{i_1} \cap A_{i_2} \cap A_{i_3}}
+                                - \cdots \\
+                              & + {(-1)}^{n - 1} \prob{\cap_{k=1}^n A_k}
+      \end{align*}
+    \end{enumerate}
+\end{definition}
+
+\section{Continuity property of probabilities}
+\begin{theorem}
+  Let $A_1, A_2, \ldots$ be an infinite sequence of events, which is
+  \emph{monotonically increasing}, meaning $A_n \subset A_{n+1}$ for every
+  $n$. Then
+  \begin{equation*}
+    \prob{\lim_{n \to \infty} \cup_{k=1}^n A_k} =
+    \lim_{n \to \infty} \prob{A_n}
+  \end{equation*}
+\end{theorem}
+
+\begin{proof}
+  Let $B_1 = A_1$ and $B_n = A_n\cap A_{n-1}^c$ for $n \geq 2$. The events
+  $B_n$ are disjoint, and we have $An = \cup_{k=1}^n B_k$. Let $A =
+  \cup_{n=1}^\infty A_n$. Then $A = \cup_{k=1}^{\infty} B_k$. Now by the
+  \emph{additivity axiom} we have
+  \begin{align*}
+    \prob{A} & = \sum_{k=1}^\infty \prob{B_k} \\
+             & = \lim_{n \to \infty} \sum_{k=1}^n \prob{B_k} \\
+             & = \lim_{n \to \infty} \prob{\cup_{k=1}^n B_k} \\
+             & = \lim_{n \to \infty} \prob{A_n}
+  \end{align*}
+\end{proof}
+
+\begin{theorem}
+  Let $A_1, A_2, \ldots$ be an infinite sequence of events, which is
+  \emph{monotonically decreasing}, meaning $A_{n+1} \subset A_n$ for every
+  $n$. Then
+  \begin{equation*}
+    \prob{\lim_{n \to \infty} \cap_{k=1}^n A_k} =
+    \lim_{n \to \infty} \prob{A_n}
+  \end{equation*}
+\end{theorem}
+
+\end{document}

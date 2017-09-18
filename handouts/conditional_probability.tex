@@ -1,0 +1,114 @@
+\documentclass{tufte-handout}
+\usepackage{amsmath, amsfonts, amsthm}
+
+%% environments
+\theoremstyle{definition} \newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{definition} \newtheorem{remark}{Remark}
+
+%% commands
+\newcommand{\prob}[1]{\mathbf{P}\left(#1\right)}
+\newcommand{\cprob}[2]{\mathbf{P}\left(#1 \,|\, #2\right)}
+
+\author{John N. Tsitsiklis}
+\title{Probabilistic Models}
+\begin{document}
+\maketitle
+\section{Conditional Probability}
+\begin{definition}[Conditional Probability]
+  The \emph{conditional probability} of an event $A$, given an event $B$
+  with $\prob{B} > 0$, is defined by
+  \begin{equation*}
+    \prob{A | B} = \frac{\prob{A \cap B}}{\prob{B}},
+  \end{equation*}
+  and specifies a new probability law on the same sample space $\Omega$.
+  In particular, all properties of probability laws remain valid for
+  conditional probability laws.
+\end{definition}
+
+\begin{remark}
+  If the possible outcomes are finitely many and equally likely, then
+  \begin{equation*}
+    \prob{A | B} = \frac{\text{number of elements of } A \cap B}
+    {\text{number of elements of } B}
+  \end{equation*}
+\end{remark}
+
+\begin{definition}[Multiplication Rule]
+  Assuming that all the conditioning events have positive probability, we
+  have
+  \begin{equation*}
+    \prob{\cap_{i=1}^n A_i} = \prob{A_1} \prob{A_2 | A_1}
+    \prob{A_3 | A_1 \cap A_2} \cdots \prob{A_n | \cap_{i=1}^{n-1} A_i}
+  \end{equation*}
+\end{definition}
+
+\section{Total probability theorem and Baye's rule}
+\begin{definition}[Total Probability Theorem]
+  Let $A_1, A_2, \ldots, A_n$ be disjoint events that form a partition of
+  the sample space and $\prob{A_i} > 0$, for all $i$. Then, for any event
+  $B$, we have
+  \begin{align*}
+    \prob{B} & = \prob{A_1 \cap B} + \cdots + \prob{A_1 \cap B} \\
+             & = \prob{A_1} \prob{B | A_1} + \cdots + \prob{A_n}
+               \prob{B | A_n}
+  \end{align*}
+\end{definition}
+
+\begin{definition}[Baye's Rule]
+  Let $A_1, A_2, \ldots, A_n$ be disjoint events that form a partition of
+  the sample space, and assume that $\prob{A_i} > 0$, for all $i$. Then,
+  for any event $B$ such that $\prob{B} > 0$, we have
+  \begin{align*}
+    \prob{A_i | B} & = \frac{\prob{A_i} \prob{B | A_i}}{\prob{B}} \\
+                   & = \frac{\prob{A_i} \prob{B | A_i}}
+                     {\prob{A_1} \prob{B | A_1} + \cdots + \prob{A_n}
+                     \prob{B | A_n}}
+  \end{align*}
+\end{definition}
+
+\section{Independence}
+\begin{definition}[Independence]
+  Two events $A$ and $B$ are said to be \emph{independent} if
+  \begin{equation*}
+    \prob{A \cap B} = \prob{A} \prob{B}
+  \end{equation*}
+\end{definition}
+
+\begin{remark}
+  If $A$, $B$ are independent, then $A$, $B^c$ and $A^c$, $B^c$ are
+  also independent.
+\end{remark}
+
+\subsection{Conditional Independence}
+\begin{definition}[Conditional Independence]
+  Two events $A$ and $B$ are said to be \emph{conditionally independent}
+  given another event $C$ with $\prob{C} > 0$, if
+  \begin{equation*}
+    \cprob{A \cap B}{C} = \cprob{A}{C} \cprob{B}{C}
+  \end{equation*}
+\end{definition}
+
+\begin{remark}
+  If $\prob{B \cap C} > 0$, conditional independence is equivalent to the
+  condition
+  \begin{equation*}
+    \cprob{A}{B \cap C} = \cprob{A}{C}
+  \end{equation*}
+\end{remark}
+
+\begin{remark}
+  Independence does not imply conditional independence, and vice versa.
+\end{remark}
+
+\subsection{Independence of a Collection of Events}
+\begin{definition}[Independence of Several Events]
+  We say that the events $A_1, A_2, \ldots, A_n$ are \emph{independent} if
+  \begin{equation*}
+    \prob{\bigcap_{i \in S} A_i} = \prod_{i \in S} \prob{A_i} \quad
+    \text{for every subset $S$ of } \{1, 2, \ldots, n\}.
+  \end{equation*}
+\end{definition}
+
+
+\end{document}
