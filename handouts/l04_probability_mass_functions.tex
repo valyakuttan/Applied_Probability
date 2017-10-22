@@ -1,0 +1,85 @@
+\documentclass{tufte-handout}
+\usepackage{amsmath, amsfonts, amsthm}
+
+%% environments
+\theoremstyle{definition} \newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{definition} \newtheorem{remark}{Remark}
+\theoremstyle{definition} \newtheorem{example}{Example}
+
+%% commands
+\newcommand{\prob}[1]{\mathbf{P}\left(#1\right)}
+\newcommand{\cprob}[2]{\mathbf{P}\left(#1 \,|\, #2\right)}
+\newcommand{\pmf}[2]{p_#1\left(#2\right)}
+
+\author{John N. Tsitsiklis}
+\title{Discrete Random Variables: Probability Mass Functions}
+\begin{document}
+\maketitle
+\section{Basics}
+\begin{definition}
+  A \emph{discrete random variable} is a real-valued function of the
+  outcome of the experiment that can take a finite or countably infinite
+  number of values.
+\end{definition}
+
+\section{Probability Mass Function}
+\begin{definition}
+  For a discrete random variable $X$, the \emph{probability mass function}
+  of $X$, denoted by $\pmf{X}{x}$, is the probability of the event
+  $\left\{ X = x \right\}$ consisting of all outcomes that give rise to a value of
+  $X$ equal to $x$:
+  \begin{equation*}
+    \pmf{X}{x} = \prob{\left\{ X = x \right\}}
+  \end{equation*}
+\end{definition}
+
+\subsection{The Brnoulli Random Variable}
+Consider the toss of a coin, which comes up a head with probability $p$,
+and a tail with probability $1 - p$. The \emph{Bernoulli} random
+variable takes two values $1$ and $0$, depending on whether the outcome
+is a head or a tail:
+
+\begin{equation*}
+  X =
+  \begin{cases}
+    1 & \text{if a head},\\
+    0 & \text{if a tail}.
+  \end{cases}
+\end{equation*}
+
+It's PMF is
+\begin{equation*}
+  \pmf{X}{k} =
+  \begin{cases}
+    p & \text{if } k = 1,\\
+    1 - p & \text{if } k = 0.
+  \end{cases}
+\end{equation*}
+
+\subsection{The Binomial Random Variable}
+A coin is tossed $n$ times. At each toss, the coin comes up a head with
+probability $p$, and a tail with probability $1 - p$, independent of prior
+tosses. Let $X$ be the number of heads in the $n$-toss sequence. We refer
+to $X$ as a \emph{binomial} random variable with \emph{parameters} $n$
+\emph{and} $p$.
+
+It's PMF is
+\begin{equation*}
+  \pmf{X}{k} = \binom{n}{k} p^k {(1 - p)}^{n - k}, \quad k = 0,1, \ldots, n
+\end{equation*}
+
+\subsection{The Geometric Random Variable}
+The \emph{geometric} random variable is the number $X$ of tosses needed
+for a head to come up for the first time. Its PMF is given by
+\begin{equation*}
+  \pmf{X}{k} = {(1 - p)}^{k - 1} p, \quad k = 1, 2, \ldots
+\end{equation*}
+
+\subsection{The Poisson Random Variable}
+A \emph{Poisson} random variable has a PMF given by
+\begin{equation*}
+  \pmf{X}{k} = e^{-\lambda} \frac{\lambda^k}{k!},\quad k = 0,1, \ldots
+\end{equation*}
+where $\lambda$ is a positive parameter characterizing the PMF.
+\end{document}

@@ -1,0 +1,90 @@
+\documentclass{tufte-handout}
+\usepackage{amsmath, amsfonts, amsthm}
+
+%% environments
+\theoremstyle{definition} \newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{definition} \newtheorem{remark}{Remark}
+\theoremstyle{definition} \newtheorem{example}{Example}
+
+%% commands
+\newcommand{\prob}[1]{\mathbf{P}\left(#1\right)}
+\newcommand{\cprob}[2]{\mathbf{P}\left(#1 \,|\, #2\right)}
+
+\author{John N. Tsitsiklis}
+\title{Counting}
+\begin{document}
+\maketitle
+\section{Basics}
+
+\subsection{The Counting Principle}
+Consider a process that consists of $r$ stages. Suppose that:
+\begin{enumerate}[(a)]
+\item There are $n_1$ possible results at the first stage.
+\item For every possible result at the first stage, there are $n_2$
+  possible results at the second stage.
+
+\item More generally, for an sequence of possible results at the first
+  $i - 1$ stages, there are $n_i$ possible results at the $i^{\text{th}}$
+  stage. Then, the total number of possible results of the $r$-stage
+  process is
+  \begin{equation*}
+    n_1 n_2 \cdots n_r
+  \end{equation*}
+\end{enumerate}
+
+\subsection{$k$-permutations}
+We start with $n$ distinct objects, and let $k$ be some positive integer,
+with $0 \leq k \leq n$. We wish to count the number of different ways
+that we can pick $k$ out of these $n$ objects and arrange them in a
+sequence.
+\begin{equation*}
+  k\text{-permutations} = \frac{n!}{(n-k)!}
+\end{equation*}
+
+\subsection{Combinations}
+We start with $n$ distinct objects, and let $k$ be some positive integer,
+with $0 \leq k \leq n$. We wish to count the number of $k$-element
+subsets of a given $n$-element set. The number of possible combinations
+is
+\begin{equation*}
+  \frac{n!}{k!(n-k)!} \text{ which is same as } \binom{n}{k}
+\end{equation*}
+
+\subsection{Partitions}
+We are given an $n$-element set and nonnegative integers
+$n_1, n_2, \ldots, n_r$, whose sum is equal to $n$. We consider partitions
+of the set into $r$ disjoint subsets, with the $i^{\text{th}}$ subset
+containing exactly $n_i$ elements. The number of partitions is
+\begin{equation*}
+  \frac{n!}{n_1! n_2! \cdots n_r!} \text{ which is denoted by }
+  \binom{n}{n_1, n_2, \ldots, n_r}
+\end{equation*}
+
+\section{Examples}
+\begin{example}
+  Ninety students, including Joe and Jane, are to be split into three
+  classes of equal size, and this is to be done at random. What is the
+  probability that Joe and Jane end up in the same class?
+\end{example}
+
+ We place Joe in one class. Regarding Jane, there are $89$ possible
+ slots, and only $29$ place her in the same class as Joe. Thus the
+ answer is $\frac{29}{89}$.
+
+ \begin{example}[Hypergeometric probabilities]
+   An urn contains $n$ balls, out of which $m$ are red. We select $k$ of
+   the balls at random, without replacement. What is the probability that
+   $i$ of the selected balls are red?
+ \end{example}
+
+ The sample space consists of $\binom{n}{k}$ different ways of selecting
+ $k$ out of $n$ balls. For the event of interest to occur, we have to
+ select $i$ out of the $m$ red balls and also select $k - i$ balls out of
+ the $n - m$ balls, which are not red. Thus the desired probability is
+ \begin{equation*}
+   \frac{\binom{m}{i} \binom{n - m}{k - i}}{\binom{n}{k}}
+ \end{equation*}
+ for $i \geq 0$ satisfying $i \leq m, i \leq k$ and $k - i \leq n - m$.
+ For all other $i$, the probability is zero.
+\end{document}
