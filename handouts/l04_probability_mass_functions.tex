@@ -23,7 +23,7 @@
   number of values.
 \end{definition}
 
-\section{Probability Mass Function}
+\subsection{Probability Mass Function}
 \begin{definition}
   For a discrete random variable $X$, the \emph{probability mass function}
   of $X$, denoted by $\pmf{X}{x}$, is the probability of the event
@@ -34,6 +34,7 @@
   \end{equation*}
 \end{definition}
 
+\section{Some Common Random Variables}
 \subsection{The Brnoulli Random Variable}
 Consider the toss of a coin, which comes up a head with probability $p$,
 and a tail with probability $1 - p$. The \emph{Bernoulli} random
@@ -82,4 +83,16 @@ A \emph{Poisson} random variable has a PMF given by
   \pmf{X}{k} = e^{-\lambda} \frac{\lambda^k}{k!},\quad k = 0,1, \ldots
 \end{equation*}
 where $\lambda$ is a positive parameter characterizing the PMF.
+
+\subsection{Discrete Uniform Random Variable}
+If $X$ is a \emph{Uniform} random variable, which is uniformly
+distributed between two integers $a$ and $b$, then its PMF is given by
+\begin{equation*}
+  \pmf{X}{k} =
+  \begin{cases}
+    \frac{1}{b - a + 1} & \text{if } k = a, a + 1, \ldots, b,\\
+    0 & \text{otherwise.}
+  \end{cases}
+\end{equation*}
+where $a$ and $b$ are two integers with $a < b$.
 \end{document}

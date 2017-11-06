@@ -1,0 +1,158 @@
+\documentclass{tufte-handout}
+\usepackage{amsmath, amsfonts, amsthm}
+
+%% environments
+\theoremstyle{definition} \newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{definition} \newtheorem{remark}{Remark}
+\theoremstyle{definition} \newtheorem{example}{Example}
+
+%% commands
+\newcommand{\prob}[1]{\mathbf{P} \left( #1 \right)}
+\newcommand{\cprob}[2]{\mathbf{P} \left( #1 \,|\, #2 \right)}
+\newcommand{\pmf}[2]{p_#1 \left( #2 \right)}
+\newcommand{\expt}[1]{\mathbf{E} \left[ #1 \right]}
+
+\author{John N. Tsitsiklis}
+\title{Expectation, Mean and Variance of a Random Variable}
+\begin{document}
+\maketitle
+\section{Expectation}
+\begin{definition}
+  The \emph{Expectation} of a random variable $X$, with PMF $p_X$, is
+  given by
+  \begin{equation*}
+    \expt{X} = \sum_x x \pmf{X}{x}
+  \end{equation*}
+\end{definition}
+
+\begin{remark}
+  The mean can be interpreted as the \emph{center of gravity} of the PMF.
+  Given a bar with a weight $\pmf{X}{x}$ placed at each point $x$ with
+  $\pmf{X}{x} > 0$, the center of gravity $c$ is the point at which the
+  sum of the torques from the weights to its left is equal to the sum of
+  the torques from the weights to its right:
+  \begin{equation*}
+    \sum_x (x - c) \pmf{X}{x} = 0
+  \end{equation*}
+  Thus $c = \sum_x x \pmf{X}{x}$, i.e the center of gravity is equal to
+  the mean $\expt{X}$.
+\end{remark}
+
+\begin{remark}
+  Let $X$ be a random variable with PMF $p_X$, and let $g(X)$ be a
+  function of $X$. Then the expected value of the random variable $g(X)$
+  is given by
+  \begin{equation*}
+    \expt{g(X)} = \sum_x g(x) \pmf{X}{x}
+  \end{equation*}
+\end{remark}
+
+\section{Variance and Moments}
+\begin{definition}[Variance]
+  The variance $var(X)$ of a random variable $X$ is defined by
+  \begin{equation*}
+    var(X) = \expt{{(X - \expt{X})}^2}
+  \end{equation*}
+  which can be expressed in terms of moments as
+  \begin{equation*}
+    var(X) = \expt{X^2} - {\left( \expt{X} \right)}^2
+  \end{equation*}
+\end{definition}
+
+\section{Mean and Variance of a Linear Function of a Random Variable}
+\begin{definition}
+  Let $X$ be a random variable and let
+  \begin{equation*}
+    Y = aX + b
+  \end{equation*}
+  where $a$ and $b$ are given scalars. Then
+  \begin{equation*}
+    \expt{Y} = a \expt{X} + b \quad \textnormal{and }var(Y) = a^2\, var(X)
+  \end{equation*}
+\end{definition}
+
+\section{Mean and Variance of Some Common Random Variables}
+
+\subsection{Bernoulli Random Variable}
+If $X$ is a \emph{Bernoulli} random variable with PMF
+\begin{equation*}
+  \pmf{X}{k} =
+  \begin{cases}
+    p & \text{if } k = 1,\\
+    1 - p & \text{if } k = 0.
+  \end{cases}
+\end{equation*}
+The \emph{mean} and \emph{variance} of $X$ are given by
+\begin{align*}
+  \expt{X} & = p\\
+  var(X)   & = p(1-p)
+\end{align*}
+
+\subsection{The Binomial Random Variable}
+If $X$ is a \emph{Binomial} random variable with PMF
+\begin{equation*}
+  \pmf{X}{k} = \binom{n}{k} p^k {(1 - p)}^{n - k}, \quad k = 0, 1,
+  \ldots, n,
+\end{equation*}
+The \emph{mean} and \emph{variance} of $X$ are given by
+\begin{align*}
+  \expt{X} & = np\\
+  var(X)   & = np(1-p)
+\end{align*}
+
+\subsection{The Geometric Random Variable}
+If $X$ is a \emph{Geometric} random variable with PMF
+\begin{equation*}
+  \pmf{X}{k} = {(1 - p)}^{k - 1} p, \quad k = 1, 2, \ldots
+\end{equation*}
+
+The \emph{mean} and \emph{variance} of $X$ are given by
+\begin{align*}
+  \expt{X} & = \frac{1}{p}\\
+  var(X)   & = \frac{1 - p}{p^2}
+\end{align*}
+
+\subsection{The Poisson Random Variable}
+If $X$ is a \emph{Poisson} random variable with PMF
+\begin{equation*}
+  \pmf{X}{k} = e^{-\lambda} \frac{\lambda^k}{k!},\quad k = 0,1, \ldots
+\end{equation*}
+where $\lambda$ is a positive parameter characterizing the PMF.
+
+The \emph{mean} and \emph{variance} of $X$ are given by
+\begin{align*}
+  \expt{X} & = \lambda \\
+  var(X)   & = \lambda
+\end{align*}
+
+\subsection{The Discrete Uniform Random Variable}
+If $X$ is a \emph{Uniform} random variable with PMF
+\begin{equation*}
+  \pmf{X}{k} =
+  \begin{cases}
+    \frac{1}{b - a + 1} & \text{if } k = a, a + 1, \ldots, b,\\
+    0 & \text{otherwise.}
+  \end{cases}
+\end{equation*}
+where $a$ and $b$ are two integers with $a < b$.
+
+The \emph{mean} and \emph{variance} of $X$ are given by
+\begin{align*}
+  \expt{X} & = \frac{a + b}{2} \\
+  var(X)   & = \frac{(b - a)(b - a + 2)}{12}
+\end{align*}
+
+\begin{example}
+  Two buses carrying $101$ students arrive at a job convention. The buses
+  carry $100$ and $1$ students respectively. One of the students is
+  randomly selected. Let $X$ be the number of students on the bus
+  carrying this selected student. One of the drivers is also randomly
+  selected. Let $Y$ denote the students on his bus. Which of $\expt{X}$
+  or $\expt{Y}$ is bigger?
+\end{example}
+We expect $\expt{X}$ is bigger than $\expt{Y}$ since if we choose a
+student, we are more likely to pick a bus with more students. If we
+compute the values $\expt{X} \approx 100$ while $\expt{Y} \approx 50$,
+which supports our intuition.
+\end{document}
