@@ -1,16 +1,52 @@
 \documentclass{tufte-handout}
-\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{thmtools}
 
-%% environments
+
+%% user defined styles
+%%
+% theorem style for example
+\declaretheoremstyle[
+spaceabove=6pt, spacebelow=6pt,
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=1em,
+%numberwithin=section
+]{exstyle}
+
+% theorem style for solution
+\declaretheoremstyle[
+spaceabove=6pt, spacebelow=6pt,
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=1em,
+headpunct={},
+qed= $\blacksquare$,
+numbered=no
+]{solstyle}
+
+%% user defined environments
+%%
 \theoremstyle{definition} \newtheorem{definition}{Definition}
 \newtheorem{theorem}{Theorem}
 \theoremstyle{definition} \newtheorem{remark}{Remark}
-\theoremstyle{definition} \newtheorem{example}{Example}
 
-%% commands
-\newcommand{\prob}[1]{\mathbf{P}\left(#1\right)}
-\newcommand{\cprob}[2]{\mathbf{P}\left(#1 \,|\, #2\right)}
-\newcommand{\pmf}[2]{p_#1\left(#2\right)}
+\declaretheorem[style=exstyle]{example}
+\declaretheorem[style=solstyle]{solution}
+
+
+%% user defined macros
+%%
+\newcommand{\prob}[1]{\mathbf{P} \left( #1 \right)}
+\newcommand{\cprob}[2]{\mathbf{P} \left( #1 \, | \, #2 \right)}
+\newcommand{\pmf}[2]{p_{#1} \left( #2 \right)}
+\newcommand{\expt}[1]{\mathbf{E} \left[ #1 \right]}
+\newcommand{\jpmf}[4]{p_{#1, #2} \left( #3, #4 \right)}
+\newcommand{\cpmf}[3]{p_{#1 | #2} \left( #3 \right)}
+\newcommand{\cexpt}[2]{\mathbf{E} \left[ #1 \, | \, #2 \right]}
+
 
 \author{John N. Tsitsiklis}
 \title{Probabilistic Models}

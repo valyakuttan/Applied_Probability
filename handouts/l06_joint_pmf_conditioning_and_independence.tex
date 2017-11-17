@@ -1,0 +1,323 @@
+\documentclass{tufte-handout}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{thmtools}
+
+
+%% environments
+\theoremstyle{definition} \newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{definition} \newtheorem{remark}{Remark}
+
+% theorem style for example
+\declaretheoremstyle[
+spaceabove=6pt, spacebelow=6pt,
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=1em,
+%numberwithin=section
+]{exstyle}
+
+% theorem style for solution
+\declaretheoremstyle[
+spaceabove=6pt, spacebelow=6pt,
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=1em,
+headpunct={},
+qed= $\blacksquare$,
+numbered=no
+]{solstyle}
+
+\declaretheorem[style=exstyle]{example}
+\declaretheorem[style=solstyle]{solution}
+
+
+%% commands
+\newcommand{\prob}[1]{\mathbf{P} \left( #1 \right)}
+\newcommand{\cprob}[2]{\mathbf{P} \left( #1 \, | \, #2 \right)}
+\newcommand{\pmf}[2]{p_{#1} \left( #2 \right)}
+\newcommand{\expt}[1]{\mathbf{E} \left[ #1 \right]}
+\newcommand{\jpmf}[4]{p_{#1, #2} \left( #3, #4 \right)}
+\newcommand{\cpmf}[3]{p_{#1 | #2} \left( #3 \right)}
+\newcommand{\cexpt}[2]{\mathbf{E} \left[ #1 \, | \, #2 \right]}
+
+\author{John N. Tsitsiklis}
+\title{Joint PMF and Conditioning of Multiple Random Variables}
+\begin{document}
+\maketitle
+\section{Joint PMF of Multiple Random Variables}
+\begin{definition}[Joint PMF]
+  Let $X$ and $Y$ be two random variables associated with the same
+  experiment. Then the \emph{joint PMF} $p_{X, y}$ of $X$ and $Y$ is
+  defined by
+  \begin{equation*}
+    \jpmf{X}{Y}{x}{y} = \prob{X = x, Y = y}
+  \end{equation*}
+\end{definition}
+
+\begin{definition}[Marginal PMF]
+  The \emph{marginal PMF}s of $X$ and $Y$ can be obtained from the joint
+  PMF, using the formulas
+  \begin{equation*}
+    \pmf{X}{x} = \sum_y \jpmf{X}{Y}{x}{y}, \quad
+    \pmf{Y}{y} = \sum_x \jpmf{X}{Y}{x}{y}
+  \end{equation*}
+
+\end{definition}
+
+\begin{remark}
+  If $A$ is the set of all pairs that have a certain property, then
+  \begin{equation*}
+      \prob{A} = \sum_{(x, y) \in A} \jpmf{X}{Y}{x}{y}
+  \end{equation*}
+\end{remark}
+
+\begin{remark}
+  A function $g(X, Y)$ of $X$ and $Y$ defines another random variable, and
+  \begin{equation*}
+    \expt{g(X, Y)} = \sum_x \sum_y g(x, y) \jpmf{X}{Y}{x}{y}
+  \end{equation*}
+\end{remark}
+
+\begin{remark}
+  If $g(X, Y) = aX + bY + c$, we have
+  \begin{equation*}
+    \expt{aX + bY + c} = a \expt{X} + b \expt{Y} + c
+  \end{equation*}
+\end{remark}
+
+\begin{example}[The Hat Problem]
+  Suppose that $n$  people throw their hats in a box and then each picks
+  one hat at random. What is the expected value of $X$, the number of
+  people that get back their own hat?
+\end{example}
+
+\begin{solution}
+  For the $i$th person, let's define the random varible $X_i$ such that
+  \begin{equation*}
+    X_i =
+    \begin{cases}
+      1 & \text{if the person picks his own hat},\\
+      0 & \text{otherwise}.
+    \end{cases}
+  \end{equation*}
+
+  Since $\prob{X = 1} = \frac{1}{n}$, we have
+  \begin{equation*}
+    \expt{X_i} = 1 \cdot \frac{1}{n} + 0 \cdot (1 - \frac{1}{n})
+    = \frac{1}{n}
+  \end{equation*}
+
+  We now have
+  \begin{equation*}
+    X = X_1 + X_2 + \cdots + X_n
+  \end{equation*}
+
+  so that
+  \begin{equation*}
+    \expt{X} = \expt{X_1} + \expt{X_2} + \cdots + \expt{X_n}
+    = n \cdot \frac{1}{n} = 1
+  \end{equation*}
+\end{solution}
+
+\section{Conditioning}
+
+\subsection{Conditioning a Random Varible on an Event}
+
+\begin{definition}[Conditional PMF]
+  The \emph{Conditional PMF} of a random variable $X$, conditioned on a
+  particular event $A$ with $\prob{A} > 0$, is defined by
+  \begin{equation*}
+    \cpmf{X}{A}{x} = \cprob{X = x}{A}
+    = \frac{ \prob{\{X = x \} \cap A}}{\prob{A}}
+  \end{equation*}
+\end{definition}
+
+\begin{remark}
+  The events $\{X = x\} \cap A$ are disjoint for different values of $x$,
+  their union is $A$, hence
+  \begin{equation*}
+    \prob{A} = \sum_x \prob{\{X = x\} \cap A}
+  \end{equation*}
+
+  Combining the above formulas we have
+  \begin{equation*}
+    \sum_x \cprob{X}{A}{x} = 1
+  \end{equation*}
+
+  So $p_{X|A}$ is a legitimate PMF.
+\end{remark}
+
+\begin{remark}
+  If $A_1, \ldots, A_n$ are disjoint events that form a partition of the
+  sample space, with $\prob{A_i} > 0$ for all $i$, then
+  \begin{equation*}
+    \pmf{X}{x} = \sum_{i = 1} ^n \prob{A_i} \cpmf{X}{A_i}{x}
+  \end{equation*}
+
+  Also for any event $B$, with $\prob{A_i \cap B} > 0$ for all $i$, we
+  have
+  \begin{equation*}
+    \cpmf{X}{B}{x} = \sum_{i = 1} ^n \cprob{A_i}{B} \cpmf{X}{A_i \cap B}{x}
+  \end{equation*}
+\end{remark}
+
+\subsection{Conditioning one Random Variable on Another}
+
+\begin{definition}
+  Let $X$ and $Y$ be two random variables associated with the same
+  experiment. The \emph{Conditional PMF} $p_{X|Y}$ of $X$ given $Y$ is
+  defined by
+  \begin{equation*}
+    \cpmf{X}{Y}{x|y} = \prob{X = x \, | \, Y = y}
+  \end{equation*}
+\end{definition}
+
+\begin{remark}
+  \begin{equation*}
+    \jpmf{X}{Y}{x}{y} = \pmf{Y}{y} \cpmf{X}{Y}{x|y}
+    = \pmf{X}{x} \cpmf{Y}{x}{y|x}
+  \end{equation*}
+\end{remark}
+
+\subsection{Conditional Expectation}
+
+Let $X$ and $Y$ be random variables associated with the same experiment
+\begin{itemize}
+\item The \emph{conditional expectation} of $X$ given an event $A$ with
+  $\prob{A} > 0$, is defined by
+  \begin{equation*}
+    \cexpt{X}{A} = \sum_x x \cpmf{X}{A}{x}
+  \end{equation*}
+
+  For a function $g(X)$, we have
+    \begin{equation*}
+    \cexpt{g(X)}{A} = \sum_x g(x) \cpmf{X}{A}{x}
+  \end{equation*}
+
+\item The conditional expectation of $X$ given a value $y$ of $Y$ is
+  defined by
+  \begin{equation*}
+    \cexpt{X}{Y = y} = \sum_x x \cpmf{X}{Y}{x | y}
+  \end{equation*}
+
+\item   If $A_1, \ldots, A_n$ are disjoint events that form a partition
+  of the sample space, with $\prob{A_i} > 0$ for all $i$, then
+  \begin{equation*}
+    \expt{X} = \sum_{i = 1} ^n \prob{A_i} \cexpt{X}{A_i}
+  \end{equation*}
+
+  Also for any event $B$, with $\prob{A_i \cap B} > 0$ for all $i$, we
+  have
+  \begin{equation*}
+    \cexpt{X}{B} = \sum_{i = 1} ^n \cprob{A_i}{B} \cexpt{X}{A_i \cap B}
+  \end{equation*}
+
+\item We have
+  \begin{equation*}
+    \expt{X} = \sum_y \pmf{Y}{y} \cexpt{X}{Y = y}
+  \end{equation*}
+\end{itemize}
+
+\begin{example}[D. Bernoulli's problem of joint lives]
+  Consider $2m$ persons forming $m$ couples who live together at a given
+  time. Suppose that at some later time the probability of each person
+  being alive is $p$, independent of other persons. At that later time,
+  let $A$ be the number of persons that are alive and let $S$ be the
+  number of couples in which both partners are alive. For any survivor
+  number $a$, find $\cexpt{S}{A = a}$
+\end{example}
+
+\begin{solution}
+  Let $X_j$ be the indicator of the event that the
+  $j$th couple survives. Then
+  \begin{align*}
+    \cexpt{S}{A = a} & = \expt{\sum_{j = 1} ^m X_j} \\
+                     & = m \expt{X_1}\\
+                     & = m \prob{X_1 = 1}
+  \end{align*}
+  because the chance of survival is the same for every couple. Now we can
+  choose the $a$ survivors in $\binom{2m}{a}$ ways, and the number of
+  these in which the first couple is remain alive is
+  $\binom{2m - 2}{a - 2}$. Since all outcomes are equally likely we have
+  \begin{equation*}
+    \prob{X_1 = 1} = \frac{\binom{2m - 2}{a - 2}}{\binom{2m}{a}}
+    = \frac{a(a - 1)}{2m(2m - 1)}
+  \end{equation*}
+  Hence we have
+  \begin{equation*}
+    \cexpt{S}{A = a} = m \cdot \frac{a(a - 1)}{2m(2m - 1)}
+    = \frac{a(a - 1)}{2(2m - 1)} 
+  \end{equation*}
+
+  \noindent \textbf{An alternative solution}:\\
+  Let $X_i$ be the random variable taking the value
+  $1$ or $0$ depending on whether the first partner of the $i$th couple
+  has survived or not. Let $Y_i$ be the corresponding random variable for
+  the second partner of the $i$th couple. Then, we have
+  $S = \sum_{i=1} ^m X_i Y_i$ , and by using the total expectation theorem,
+  \begin{align*}
+    \cexpt{S}{A = a} & = \sum_{i = 1} ^m \cexpt{X_i Y_i}{A = a}\\
+                     & = m \cexpt{X_1 Y_1}{A = a}\\
+                     & = m \cprob{X_1Y_1 = 1}{A = a}
+  \end{align*}
+  Also
+  \begin{align*}
+    \cprob{X_1Y_1 = 1}{A = a} & = \cprob{Y_1 = 1}{X_1 = 1 \cap A = a}
+                                \cdot \cprob{X_1 = 1}{A = a}\\
+  \end{align*}
+  We have
+  \begin{equation*}
+    \cprob{Y_1 = 1}{X_1 = 1 \cap A = a} = \frac{a - 1}{2m - 1}, \quad
+    \cprob{X_1 = 1}{A = a} = \frac{a}{2m}
+  \end{equation*}
+  Thus
+  \begin{align*}
+    \cexpt{S}{A = a} & = m \cdot \frac{a - 1}{2m - 1} \cdot \frac{a}{2m}\\
+                     & = \frac{a(a - 1)}{2(2m - 1)}
+  \end{align*}
+  Note that $\cexpt{S}{A = a}$ does not depend on $p$.
+\end{solution}
+
+\begin{example}
+  A coin that has probability of heads equal to $p$ is tossed successively
+  and independently until a head comes twice in a row or a tail comes
+  twice in a row. Find the expected value of the number of tosses.
+\end{example}
+
+\begin{solution}
+  Let $X$ be number of tosses until the game is over and let $H_k$
+  (or $T_k$) be the event that a head (or a tail, respectively)
+  comes at the $k$th toss. Since $H_1$ and $T_1$ form a partition of the
+  sample space, by total expectation theorem, we have
+  \begin{equation*}
+    \expt{X} = p \cexpt{X}{H_1} + (1 - p) \cexpt{X}{T_1}
+  \end{equation*}
+  Using the total expectation theorem again, we have
+  \begin{align*}
+    \cexpt{X}{H_1} & = p \cexpt{X}{H_1 \cap H_2} +
+                     (1 - p) \cexpt{X}{H_1 \cap T_2}\\
+                   & = 2p + (1 - p) (1 + \cexpt{X}{T_1})
+  \end{align*}
+  Since $\cexpt{X}{H_1 \cap H_2} = 1$ as game ends. Also
+  $\cexpt{X}{H_1 \cap T_2} = 1 + \cexpt{X}{T_1}$ since the last toss only
+  matters and the game proceeds. Similarly we have
+  \begin{equation*}
+    \cexpt{X}{T_1} = 2(1 - p) + p (1 + \cexpt{X}{H_1})
+  \end{equation*}
+  Combining the above equations we have
+  \begin{equation*}
+    \cexpt{X}{H_1} = \frac{2 + {(1 - p)}^2}{1 - p(1 - p)}
+  \end{equation*}
+  And
+  \begin{equation*}
+    \cexpt{X}{T_1} = \frac{2 + p^2}{1 - p(1 - p)}
+  \end{equation*}
+  Thus
+  \begin{equation*}
+    \expt{X} = \frac{2 + p(1 - p)}{1 - p(1 - p)}
+  \end{equation*}
+\end{solution}
+\end{document}
