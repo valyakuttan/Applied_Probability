@@ -1,15 +1,48 @@
 \documentclass{tufte-handout}
-\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{thmtools}
+
 
 %% environments
 \theoremstyle{definition} \newtheorem{definition}{Definition}
 \newtheorem{theorem}{Theorem}
 \theoremstyle{definition} \newtheorem{remark}{Remark}
-\theoremstyle{definition} \newtheorem{example}{Example}
+
+% theorem style for example
+\declaretheoremstyle[
+spaceabove=6pt, spacebelow=6pt,
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=1em,
+%numberwithin=section
+]{exstyle}
+
+% theorem style for solution
+\declaretheoremstyle[
+spaceabove=6pt, spacebelow=6pt,
+headfont=\normalfont\bfseries,
+notefont=\mdseries, notebraces={(}{)},
+bodyfont=\normalfont,
+postheadspace=1em,
+headpunct={},
+qed= $\blacksquare$,
+numbered=no
+]{solstyle}
+
+\declaretheorem[style=exstyle]{example}
+\declaretheorem[style=solstyle]{solution}
+
 
 %% commands
-\newcommand{\prob}[1]{\mathbf{P}\left(#1\right)}
-\newcommand{\cprob}[2]{\mathbf{P}\left(#1 \,|\, #2\right)}
+\newcommand{\prob}[1]{\mathbf{P} \left( #1 \right)}
+\newcommand{\cprob}[2]{\mathbf{P} \left( #1 \, | \, #2 \right)}
+\newcommand{\pmf}[2]{p_{#1} \left( #2 \right)}
+\newcommand{\expt}[1]{\mathbf{E} \left[ #1 \right]}
+\newcommand{\jpmf}[4]{p_{#1, #2} \left( #3, #4 \right)}
+\newcommand{\cpmf}[3]{p_{#1 | #2} \left( #3 \right)}
+\newcommand{\cexpt}[2]{\mathbf{E} \left[ #1 \, | \, #2 \right]}
+
 
 \author{John N. Tsitsiklis}
 \title{Counting}
@@ -52,7 +85,7 @@ is
 \end{equation*}
 
 \subsection{Partitions}
-We are given an $n$-element set and nonnegative integers
+We are given an $n$-element set and non-negative integers
 $n_1, n_2, \ldots, n_r$, whose sum is equal to $n$. We consider partitions
 of the set into $r$ disjoint subsets, with the $i^{\text{th}}$ subset
 containing exactly $n_i$ elements. The number of partitions is
@@ -61,6 +94,24 @@ containing exactly $n_i$ elements. The number of partitions is
   \binom{n}{n_1, n_2, \ldots, n_r}
 \end{equation*}
 
+\subsection{Integer Partitions}
+Given a non-negative integer $n$ and a positive integer $k$, consider the
+equation
+\begin{equation*}
+  x_1 + x_2 + \cdots + x_k = n
+\end{equation*}
+to be solved with respect to non-negative integer variables
+$x_1, x_2, \ldots, x_k$. Find the total number of solutions?
+
+There is a one-to-one correspondence between non-negative integer
+solutions of equation $x_1 + x_2 + \cdots + x_k = n$ and sequences of
+$n + k - 1$ symbols ($n$ ''$o$'' and $k - 1$ ''$|$''). Hence the total
+number of solutions equals the number of ways of selecting $k - 1$ places
+for the symbol ''$|$'' in a sequence of length $n + k - 1$. Hence the
+total number of solutions
+\begin{equation*}
+  \binom{n + k - 1}{k - 1}
+\end{equation*}
 \section{Examples}
 \begin{example}
   Ninety students, including Joe and Jane, are to be split into three
@@ -68,9 +119,11 @@ containing exactly $n_i$ elements. The number of partitions is
   probability that Joe and Jane end up in the same class?
 \end{example}
 
- We place Joe in one class. Regarding Jane, there are $89$ possible
- slots, and only $29$ place her in the same class as Joe. Thus the
- answer is $\frac{29}{89}$.
+\begin{solution}
+  We place Joe in one class. Regarding Jane, there are $89$ possible
+  slots, and only $29$ place her in the same class as Joe. Thus the
+  answer is $\frac{29}{89}$.
+\end{solution}
 
  \begin{example}[Hypergeometric probabilities]
    An urn contains $n$ balls, out of which $m$ are red. We select $k$ of
@@ -78,13 +131,44 @@ containing exactly $n_i$ elements. The number of partitions is
    $i$ of the selected balls are red?
  \end{example}
 
- The sample space consists of $\binom{n}{k}$ different ways of selecting
- $k$ out of $n$ balls. For the event of interest to occur, we have to
- select $i$ out of the $m$ red balls and also select $k - i$ balls out of
- the $n - m$ balls, which are not red. Thus the desired probability is
- \begin{equation*}
-   \frac{\binom{m}{i} \binom{n - m}{k - i}}{\binom{n}{k}}
- \end{equation*}
- for $i \geq 0$ satisfying $i \leq m, i \leq k$ and $k - i \leq n - m$.
- For all other $i$, the probability is zero.
+ \begin{solution}
+   The sample space consists of $\binom{n}{k}$ different ways of
+   selecting $k$ out of $n$ balls. For the event of interest to occur,
+   we have to select $i$ out of the $m$ red balls and also select $k - i$
+   balls out of the $n - m$ balls, which are not red. Thus the desired
+   probability is
+   \begin{equation*}
+     \frac{\binom{m}{i} \binom{n - m}{k - i}}{\binom{n}{k}}
+   \end{equation*}
+   For $i \geq 0$ satisfying $i \leq m, i \leq k$ and $k - i \leq n - m$.
+   For all other $i$, the probability is zero.
+ \end{solution}
+
+ \begin{example}
+   Prove the algebraic identity
+   \begin{equation*}
+     \sum_{k = 1} ^n k \binom{n}{k} = n 2^{n - 1}
+   \end{equation*}
+   
+ \end{example}
+ \begin{solution}
+   We have a group of $n$ persons. Consider clubs that consists of a
+   special person from the group (the club leader) and a number (possibly
+   zero) of additional club members. Let us count the number of possible
+   clubs of this type in two different ways.
+
+   There are $n$ choices for club leader. Once the leader is chosen, we
+   are left with a set of $n - 1$ available persons, and we are free to
+   choose any of the $2^{n - 1}$ subsets. Thus the number of possible
+   clubs is $n 2^{n - 1}$.
+
+   Alternatively, for fixed $k$, we can form a $k$-person club by first
+   selecting $k$ out of the $n$ available persons, which can be done
+   in $\binom{n}{k}$ ways. We can then select one of the members to
+   be the leader, for which we have $k$ choices. Hence the total mumber
+   of clubs is $\sum_{k = 1} ^n k \binom{n}{k}$
+   \begin{equation*}
+     \sum_{k = 1} ^n k \binom{n}{k} = n 2^{n - 1}
+   \end{equation*}
+ \end{solution}
 \end{document}
